@@ -1,22 +1,29 @@
-{% extends "log/base.html" %}
+{% extends 'log/base.html' %}
 
-{% block content%}
+{% block page_header %}
+  <h3>{{ topic }}</h3>
+{% endblock page_header %}
 
-  <p>Topic: {{topic}}</p>
-  
-  <p>Entries:</p>
+{% block content %}
+  <p>
+    <a href="{% url 'log:new_entry' topic.id %}">Add new entry</a>
+  </p>
 
   <ul>
   {% for entry in entries %}
-  <li>
-    <p>{{ entry.date|date:'M d, Y H:i'}}</p>
-    <p>{{ entry.text|linebreaks }}</p>
-  </li>
+    <div class="card mb-3">
+      <h4 class="card-header">
+        {{ entry.date|date:'M d, Y H:i' }}
+        <small><a href="{% url 'log:edit_entry' entry.id %}">
+            edit entry</a>
+        </small>
+      </h4>
+      <div class="card-body">
+        {{ entry.text|linebreaks }}
+      </div>
+    </div>
   {% empty %}
-  <li>
-    <p> there are no list added yet.</p>
-  </li>
+    <p>There are no entries for this topic yet.</p>
   {% endfor %}
-  </ul>
 
 {% endblock content %}
